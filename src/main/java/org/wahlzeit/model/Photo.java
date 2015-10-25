@@ -96,6 +96,11 @@ public class Photo extends DataObject {
 	protected PhotoSize maxPhotoSize = PhotoSize.MEDIUM; // derived
 	
 	/**
+	 * 
+	 */
+	protected Coordinate location = null;
+	
+	/**
 	 *
 	 */
 	protected Tags tags = Tags.EMPTY_TAGS;
@@ -418,4 +423,14 @@ public class Photo extends DataObject {
 		noVotesAtLastNotification = noVotes;
 		incWriteCount();
 	}
+        
+        public void setLocation(Coordinate coordinate)
+        {
+            location = coordinate;
+        }
+        
+        public Coordinate getLocation()
+        {
+            return location;
+        }
 }
