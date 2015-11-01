@@ -96,9 +96,9 @@ public class Photo extends DataObject {
 	protected PhotoSize maxPhotoSize = PhotoSize.MEDIUM; // derived
 	
 	/**
-	 * 
+	 * Geographic position
 	 */
-	protected Coordinate location = null;
+	protected Location location = null;
 	
 	/**
 	 *
@@ -424,12 +424,21 @@ public class Photo extends DataObject {
 		incWriteCount();
 	}
         
-        public void setLocation(Coordinate coordinate)
+        /**
+         * @methodtype set
+         * @param location 
+         */
+        public void setLocation(Location location)
         {
-            location = coordinate;
+            this.location = location;
+            incWriteCount();
         }
         
-        public Coordinate getLocation()
+        /**
+         * @methodtype get
+         * @return Location
+         */
+        public Location getLocation()
         {
             return location;
         }
