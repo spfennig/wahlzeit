@@ -431,7 +431,7 @@ public class Photo extends DataObject {
         public void setLocation(Location location)
         {
             this.location = location;
-            incWriteCount();
+            touch();
         }
         
         /**

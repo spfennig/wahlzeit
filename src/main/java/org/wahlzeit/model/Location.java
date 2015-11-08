@@ -1,4 +1,3 @@
-
 package org.wahlzeit.model;
 
 import org.wahlzeit.services.DataObject;
@@ -9,7 +8,9 @@ import java.util.Objects;
 public class Location extends DataObject {
     private String name;
     private Coordinate coordinate;
-    
+
+
+
     /**
      * @methodtype constructor
      * @param name
@@ -17,10 +18,10 @@ public class Location extends DataObject {
      */
     public Location(String name, Coordinate coordinate) {
         this.name = new String(name);
-        this.coordinate = new Coordinate(coordinate);
+        this.coordinate = coordinate;
         touch();
     }
-    
+
     
     
     /**

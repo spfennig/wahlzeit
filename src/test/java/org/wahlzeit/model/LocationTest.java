@@ -1,4 +1,3 @@
-
 package org.wahlzeit.model;
 
 import org.junit.Test;
@@ -8,23 +7,35 @@ import org.junit.Assert;
 
 
 public class LocationTest {
-    private Location testLocation;
+    private Location berlinSpheric;
+    private Location berlinCartesian;
+
+    private Coordinate berlinSphericCoordinate;
+    private Coordinate berlinCartesianCoordinate;
+
     
-    private final double Epsilon = 1e-5;
-    
-    
-    
+
+    /* TODO: Consider @BeforeClass */
     @Before
     public void setUp() {
-        testLocation = new Location("MyLocation", new Coordinate(5.5, 5.5));
+        berlinSphericCoordinate = new SphericCoordinate(52.517, 13.40);
+        berlinCartesianCoordinate = new CartesianCoordinate(3771.373, 898.468, 5055.605);
+
+        berlinSpheric = new Location("Berlin", berlinSphericCoordinate);
+        berlinCartesian = new Location("Berlin", berlinCartesianCoordinate);
     }
     
     
     
     @Test
-    public void testGetter() {
-        Assert.assertEquals("MyLocation", testLocation.getName());
-        Assert.assertEquals(5.5, testLocation.getCoordinate().getLatitude(), Epsilon);
-        Assert.assertEquals(5.5, testLocation.getCoordinate().getLongitude(), Epsilon);
+    public void testConstructorAndGetterSpheric() {
+        Assert.assertEquals("Berlin", berlinSpheric.getName());
+        Assert.assertEquals(berlinSphericCoordinate, berlinSpheric.getCoordinate());
+    }
+
+    @Test
+    public void testConstructorAndGetterCartesian() {
+        Assert.assertEquals("Berlin", berlinCartesian.getName());
+        Assert.assertEquals(berlinCartesianCoordinate, berlinCartesian.getCoordinate());
     }
 }
