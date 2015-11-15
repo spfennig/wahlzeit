@@ -96,11 +96,6 @@ public class Photo extends DataObject {
 	protected PhotoSize maxPhotoSize = PhotoSize.MEDIUM; // derived
 	
 	/**
-	 * Geographic position
-	 */
-	protected Location location = null;
-	
-	/**
 	 *
 	 */
 	protected Tags tags = Tags.EMPTY_TAGS;
@@ -423,23 +418,4 @@ public class Photo extends DataObject {
 		noVotesAtLastNotification = noVotes;
 		incWriteCount();
 	}
-        
-        /**
-         * @methodtype set
-         * @param location 
-         */
-        public void setLocation(Location location)
-        {
-            this.location = location;
-            touch();
-        }
-        
-        /**
-         * @methodtype get
-         * @return Location
-         */
-        public Location getLocation()
-        {
-            return location;
-        }
 }

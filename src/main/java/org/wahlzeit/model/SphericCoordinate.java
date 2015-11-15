@@ -1,11 +1,10 @@
 package org.wahlzeit.model;
 
 
-
 /**
  * Created by stefan on 11/8/15.
  */
-public class SphericCoordinate extends Coordinate {
+public class SphericCoordinate extends AbstractCoordinate {
     private double latitude;
     private double longitude;
     private double radius;
@@ -13,7 +12,8 @@ public class SphericCoordinate extends Coordinate {
 
 
     /**
-     * @methodtype constructor
+     * @methodtype initialization
+     * @methodproperty constructor
      * @param sphericCoordinate
      */
     public SphericCoordinate(SphericCoordinate sphericCoordinate) {
@@ -21,35 +21,38 @@ public class SphericCoordinate extends Coordinate {
     }
 
     /**
-     * @methodtype constructor
+     * @methodtype initialization
+     * @methodproperty constructor, convenience
      * @param latitude
      * @param longitude
      */
     public SphericCoordinate(double latitude, double longitude) {
-        this(latitude, longitude, 6371);
+        this(latitude, longitude, DefaultRadius);
     }
 
     /**
-     * @methodtype constructor
+     * @methodtype initialization
+     * @methodproperty constructor
      * @param latitude
      * @param longitude
      * @param radius
      * @throws IllegalArgumentException
      */
     public SphericCoordinate(double latitude, double longitude, double radius) throws IllegalArgumentException {
-        assert assertValidLatitude(latitude);
-        assert assertValidLongitude(longitude);
-        assert assertValidRadius(radius);
+        super();
+        assertValidLatitude(latitude);
+        assertValidLongitude(longitude);
+        assertValidRadius(radius);
         this.latitude = latitude;
         this.longitude = longitude;
         this.radius = radius;
-        touch();
     }
 
 
 
     /**
-     * @methodtype assert
+     * @methodtype assertion
+     * @methodproperty
      * @param latitude
      * @return
      */
@@ -61,7 +64,8 @@ public class SphericCoordinate extends Coordinate {
     }
 
     /**
-     * @methodtype assert
+     * @methodtype assertion
+     * @methodproperty
      * @param longitude
      * @return
      */
@@ -73,7 +77,8 @@ public class SphericCoordinate extends Coordinate {
     }
 
     /**
-     * @methodtype assert
+     * @methodtype assertion
+     * @methodproperty
      * @param radius
      * @return
      */
@@ -84,23 +89,11 @@ public class SphericCoordinate extends Coordinate {
         throw new IllegalArgumentException("Radius out of bounds: " + radius);
     }
 
-    /**
-     * @methodtype assert
-     * @param object
-     * @return
-     * @throws NullPointerException
-     */
-    private boolean assertNotNull(Object object) throws NullPointerException {
-        if(object != null) {
-            return true;
-        }
-        throw new NullPointerException();
-    }
-
 
 
     /**
      * @methodtype get
+     * @methodproperty primitive
      * @return
      */
     public double getLatitude() {
@@ -109,6 +102,7 @@ public class SphericCoordinate extends Coordinate {
 
     /**
      * @methodtype get
+     * @methodproperty primitive
      * @return
      */
     public double getLongitude() {
@@ -117,6 +111,7 @@ public class SphericCoordinate extends Coordinate {
 
     /**
      * @methodtype get
+     * @methodproberty primitive
      * @return
      */
     public double getRadius() {
@@ -124,73 +119,62 @@ public class SphericCoordinate extends Coordinate {
     }
 
 
+
     /**
-     * @methodtype query
-     * @param coordinate
+     * @methodtype query, conversion
+     * @methodproperty
      * @return
      */
-    public boolean isEqual(Coordinate coordinate) throws IllegalArgumentException {
-        assertNotNull(coordinate);
-        if(coordinate instanceof SphericCoordinate) {
-            return isEqual((SphericCoordinate)coordinate);
-        }
-        if(coordinate instanceof CartesianCoordinate) {
-            return isEqual((CartesianCoordinate)coordinate);
-        }
-        throw new IllegalArgumentException();
+    @Override
+    public SphericCoordinate asSphericCoordinate() {
+        return this;
+    }
+
+
+
+    /**
+     * @methodtype comparison
+     * @methodproperty
+     * @param o
+     * @return
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof SphericCoordinate)) return false;
+        return compare((SphericCoordinate)o);
     }
 
     /**
-     * @methodtype query
+     * @methodtype comparison
+     * @methodproperty default-value
      * @param sphericCoordinate
      * @return
      */
-    private boolean isEqual(SphericCoordinate sphericCoordinate) {
-        return equals(sphericCoordinate);
-    }
-
-    /**
-     * @methodtype query
-     * @param cartesianCoordinate
-     * @return
-     */
-    private boolean isEqual(CartesianCoordinate cartesianCoordinate) {
-        SphericCoordinate sphericCoordinate = convertToSphericCoordinate(cartesianCoordinate);
-        if(!isEqualFuzzy(sphericCoordinate.getLatitude(), latitude)) {
+    private boolean compare(SphericCoordinate sphericCoordinate) {
+        final double DefaultEpsilon = 1e-3;
+        if(!compare(sphericCoordinate.latitude, latitude, DefaultEpsilon)) {
             return false;
         }
-        if(!isEqualFuzzy(sphericCoordinate.getLongitude(), longitude)) {
+        if(!compare(sphericCoordinate.longitude, longitude, DefaultEpsilon)) {
             return false;
         }
-        if(!isEqualFuzzy(sphericCoordinate.getRadius(), radius)) {
+        if(!compare(sphericCoordinate.radius, radius, DefaultEpsilon)) {
             return false;
         }
         return true;
     }
 
-
-
     /**
      * Fuzzy comparison due to conversion errors
-     * Default tolerance: 1 meter
-     * @methodtype helper
-     * @param a
-     * @param b
-     * @return
-     */
-    private boolean isEqualFuzzy(double a, double b) {
-        return isEqualFuzzy(a, b, 0.001);
-    }
-
-    /**
-     * Fuzzy comparison due to conversion errors
-     * @methodtype helper
+     * @methodtype comparison, helper
+     * @methodproperty
      * @param a
      * @param b
      * @param epsilon
      * @return
      */
-    private boolean isEqualFuzzy(double a, double b, double epsilon) {
+    private boolean compare(double a, double b, double epsilon) {
         if (a == b) {
             return true;
         }
@@ -200,43 +184,12 @@ public class SphericCoordinate extends Coordinate {
 
 
     /**
-     * @methodtype conversion
-     * @param cartesianCoordinate
-     * @return SphericCoordinate
-     */
-    private SphericCoordinate convertToSphericCoordinate(CartesianCoordinate cartesianCoordinate) {
-        double radius = Math.sqrt(Math.pow(cartesianCoordinate.getX(), 2) + Math.pow(cartesianCoordinate.getY(), 2) + Math.pow(cartesianCoordinate.getZ(), 2));
-        double latitude = Math.toDegrees(Math.asin(cartesianCoordinate.getZ() / radius));
-        double longitude = Math.toDegrees(Math.atan2(cartesianCoordinate.getY(), cartesianCoordinate.getX()));
-        return new SphericCoordinate(latitude, longitude, radius);
-    }
-
-
-
-    /**
      * @methodtype query
-     * @param coordinate
-     * @return Great-circle distance in km
-     */
-    public double getDistance(Coordinate coordinate) throws IllegalArgumentException {
-        assertNotNull(coordinate);
-        if(coordinate instanceof SphericCoordinate) {
-            return getDistance((SphericCoordinate)coordinate);
-        }
-        if(coordinate instanceof CartesianCoordinate) {
-            return getDistance(convertToSphericCoordinate((CartesianCoordinate)coordinate));
-        }
-        throw new IllegalArgumentException();
-    }
-
-
-
-    /**
-     * @methodtype query
+     * @methodproperty
      * @param sphericCoordinate
      * @return
      */
-    private double getDistance(SphericCoordinate sphericCoordinate) {
+    public double getDistance(SphericCoordinate sphericCoordinate) {
         double thisLatitudeRad = Math.toRadians(latitude);
         double thisLongitudeRad = Math.toRadians(longitude);
         double otherLatitudeRad = Math.toRadians(sphericCoordinate.getLatitude());
@@ -245,23 +198,16 @@ public class SphericCoordinate extends Coordinate {
                 + Math.cos(thisLatitudeRad) * Math.cos(otherLatitudeRad)
                 * Math.cos(otherLongitudeRad - thisLongitudeRad) );
         /* TODO: What to do on different radii? */
-        return zeta * radius;
+        return zeta * DefaultRadius;
     }
 
 
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof SphericCoordinate)) return false;
-
-        SphericCoordinate that = (SphericCoordinate) o;
-
-        if (Double.compare(that.latitude, latitude) != 0) return false;
-        if (Double.compare(that.longitude, longitude) != 0) return false;
-        return Double.compare(that.radius, radius) == 0;
-    }
-
+    /**
+     * @methodtype query
+     * @methodproperty
+     * @return
+     */
     @Override
     public int hashCode() {
         int result;

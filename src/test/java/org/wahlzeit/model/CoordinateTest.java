@@ -1,40 +1,69 @@
 package org.wahlzeit.model;
 
+
+import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.Before;
 import org.junit.Assert;
 
-
-
+/**
+ * Created by stefan.
+ */
 public class CoordinateTest {
-    private Coordinate berlinSphericCoordinate;
-    private Coordinate tokioSphericCoordinate;
-    private Coordinate berlinCartesianCoordinate;
-    private Coordinate tokioCartesianCoordinate;
+    private final double EpsilonDistance = 10;  /* 10km */
 
-    private final double EpsilonDistance = 10; /* 10km */
+    public static Coordinate berlinSpheric;
+    public static Coordinate tokioSpheric;
+    public static Coordinate berlinCartesian;
+    public static Coordinate tokioCartesian;
 
 
 
-    /* TODO: Consider @BeforeClass */
-    @Before
-    public void setUp() {
-        /*
-         * Example provided by https://de.wikipedia.org/wiki/Orthodrome, released 07.09.2015 19:55
-         */
-        berlinSphericCoordinate = new SphericCoordinate(52.517, 13.40);
-        tokioSphericCoordinate = new SphericCoordinate(35.70, 139.767);
-        berlinCartesianCoordinate = new CartesianCoordinate(3771.373, 898.468, 5055.605);
-        tokioCartesianCoordinate = new CartesianCoordinate(-3949.792, 3341.734, 3717.741);
+    @BeforeClass
+    public static void setUp() {
+        /* Example provided by https://de.wikipedia.org/wiki/Orthodrome, released 07.09.2015 19:55 */
+        berlinSpheric = new SphericCoordinate(52.517, 13.4);
+        tokioSpheric = new SphericCoordinate(35.70, 139.767, 6371);
+        berlinCartesian = new CartesianCoordinate(3771.373, 898.468, 5055.605);
+        tokioCartesian = new CartesianCoordinate(-3949.792, 3341.734, 3717.741);
     }
 
 
 
     @Test
-    public void testInterchangeability() {
-        Assert.assertEquals(0, berlinSphericCoordinate.getDistance(berlinCartesianCoordinate), EpsilonDistance);
-        Assert.assertEquals(0, berlinCartesianCoordinate.getDistance(berlinSphericCoordinate), EpsilonDistance);
-        Assert.assertEquals(8912, berlinSphericCoordinate.getDistance(tokioCartesianCoordinate), EpsilonDistance);
-        Assert.assertEquals(8912, berlinCartesianCoordinate.getDistance(tokioSphericCoordinate), EpsilonDistance);
+    public void testGetDistance() {
+        Assert.assertEquals(8912, berlinSpheric.getDistance(tokioSpheric), EpsilonDistance);
+        Assert.assertEquals(8912, tokioSpheric.getDistance(berlinSpheric), EpsilonDistance);
+        Assert.assertEquals(8912, tokioSpheric.getDistance(berlinCartesian), EpsilonDistance);
+        Assert.assertEquals(8912, berlinCartesian.getDistance(tokioSpheric), EpsilonDistance);
+        Assert.assertEquals(0, berlinSpheric.getDistance(berlinSpheric), EpsilonDistance);
+        Assert.assertEquals(0, berlinCartesian.getDistance(berlinCartesian), EpsilonDistance);
+        Assert.assertEquals(0, berlinSpheric.getDistance(berlinCartesian), EpsilonDistance);
+        Assert.assertEquals(0, berlinCartesian.getDistance(berlinSpheric), EpsilonDistance);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testSphericGetDistanceArgumentNull() {
+        berlinSpheric.getDistance(null);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testCartesianGetDistanceArgumentNull() {
+        berlinCartesian.getDistance(null);
+    }
+
+
+
+    @Test
+    public void testIsEqual() {
+        Assert.assertTrue(berlinSpheric.isEqual(berlinSpheric));
+        Assert.assertTrue(berlinSpheric.isEqual(berlinCartesian));
+        Assert.assertTrue(berlinCartesian.isEqual(berlinSpheric));
+        Assert.assertTrue(berlinCartesian.isEqual(berlinCartesian));
+        Assert.assertFalse(berlinSpheric.isEqual(tokioSpheric));
+        Assert.assertFalse(berlinSpheric.isEqual(tokioCartesian));
+        Assert.assertFalse(berlinCartesian.isEqual(tokioSpheric));
+        Assert.assertFalse(berlinCartesian.isEqual(tokioCartesian));
+        Assert.assertFalse(berlinSpheric.isEqual(null));
+        Assert.assertFalse(berlinCartesian.isEqual(null));
     }
 }

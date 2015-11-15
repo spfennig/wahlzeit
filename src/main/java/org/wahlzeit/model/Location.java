@@ -1,5 +1,6 @@
 package org.wahlzeit.model;
 
+import com.googlecode.objectify.annotation.Container;
 import org.wahlzeit.services.DataObject;
 import java.util.Objects;
 
@@ -7,6 +8,7 @@ import java.util.Objects;
 
 public class Location extends DataObject {
     private String name;
+    @Container
     private Coordinate coordinate;
 
 
