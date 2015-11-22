@@ -107,11 +107,19 @@ public class SphericCoordinateTest {
         new SphericCoordinate(45, 90, -0.1);
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void testConstructorArgumentLatitudeNaN() {
+        new SphericCoordinate(Double.NaN, 45, 6371);
+    }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void testConstructorArgumentLongitudeNaN() {
+        new SphericCoordinate(45, Double.NaN, 6371);
+    }
 
-    @Test
-    public void testAsSpheric() {
-        Assert.assertEquals(berlinSpheric, berlinSpheric.asSphericCoordinate());
+    @Test(expected = IllegalArgumentException.class)
+    public void testConstructorArgumentRadiusNaN() {
+        new SphericCoordinate(45, 45, Double.NaN);
     }
 
 

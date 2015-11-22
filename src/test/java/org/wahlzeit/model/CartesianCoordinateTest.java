@@ -37,6 +37,10 @@ public class CartesianCoordinateTest {
         Assert.assertEquals(3771.373, berlinCartesian.getX(), EpsilonDouble);
         Assert.assertEquals(898.468, berlinCartesian.getY(), EpsilonDouble);
         Assert.assertEquals(5055.605, berlinCartesian.getZ(), EpsilonDouble);
+
+        Assert.assertEquals(52.517, berlinCartesian.getLatitude(), EpsilonDouble);
+        Assert.assertEquals(13.4, berlinCartesian.getLongitude(), EpsilonDouble);
+        Assert.assertEquals(6371, berlinCartesian.getRadius(), EpsilonDouble);
     }
 
     @Test
@@ -44,18 +48,30 @@ public class CartesianCoordinateTest {
         Assert.assertEquals(3771.373, berlinCartesianCopy.getX(), EpsilonDouble);
         Assert.assertEquals(898.468, berlinCartesianCopy.getY(), EpsilonDouble);
         Assert.assertEquals(5055.605, berlinCartesianCopy.getZ(), EpsilonDouble);
+
+        Assert.assertEquals(52.517, berlinCartesianCopy.getLatitude(), EpsilonDouble);
+        Assert.assertEquals(13.4, berlinCartesianCopy.getLongitude(), EpsilonDouble);
+        Assert.assertEquals(6371, berlinCartesianCopy.getRadius(), EpsilonDouble);
     }
 
     @Test(expected = NullPointerException.class)
     public void testConstructorCopyArgumentNull() {
-        CartesianCoordinate cartesianCoordinate = new CartesianCoordinate(null);
+        new CartesianCoordinate(null);
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void testConstructorArgumentXNaN() {
+        new CartesianCoordinate(Double.NaN, 2, 3);
+    }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void testConstructorArgumentYNaN() {
+        new CartesianCoordinate(1, Double.NaN, 3);
+    }
 
-    @Test
-    public void testAsSpheric() {
-        Assert.assertEquals(berlinSpheric, berlinCartesian.asSphericCoordinate());
+    @Test(expected = IllegalArgumentException.class)
+    public void testConstructorArgumentZNaN() {
+        new CartesianCoordinate(1, 2, Double.NaN);
     }
 
 

@@ -12,53 +12,92 @@ public class CartesianCoordinate extends AbstractCoordinate {
 
 
     /**
-     * @methodtype initialization
-     * @methodproperty constructor
-     * @param cartesianCoordinate
+     * @methodtype Mutation: Initialization
+     * @methodproperty Convenience: Constructor
+     * @param cartesianCoordinate CartesianCoordinate
      */
     public CartesianCoordinate(CartesianCoordinate cartesianCoordinate) {
         this(cartesianCoordinate.getX(), cartesianCoordinate.getY(), cartesianCoordinate.getZ());
     }
 
     /**
-     * @methodtype initialization
-     * @methodproperty constructor
-     * @param x
-     * @param y
-     * @param z
+     * @methodtype Mutation: Initialization
+     * @methodproperty Convenience: Constructor
+     * @param x X
+     * @param y Y
+     * @param z Z
      * @throws IllegalArgumentException
      */
-    public CartesianCoordinate(double x, double y, double z) {
+    public CartesianCoordinate(double x, double y, double z) throws IllegalArgumentException {
         super();
+        if(!isValidX(x)) {
+            throw new IllegalArgumentException("Invalid x: " + x);
+        }
+        if(!isValidY(y)) {
+            throw new IllegalArgumentException("Invalid y: " + y);
+        }
+        if(!isValidZ(z)) {
+            throw new IllegalArgumentException("Invalid z: " + z);
+        }
+        basicSetX(x);
+        basicSetY(y);
+        basicSetZ(z);
+        assertClassInvariants();
+    }
+
+
+
+    /**
+     * @methodtype Mutation: Set
+     * @methodproperty iImplementation: Primitive
+     * @param x X
+     */
+    private void basicSetX(double x) {
         this.x = x;
+    }
+
+    /**
+     * @methodtype Mutation: Set
+     * @methodproperty Implementation: Primitive
+     * @param y Y
+     */
+    private void basicSetY(double y) {
         this.y = y;
+    }
+
+    /**
+     * @methodtype Mutation: Set
+     * @methodproperty Implementation: Primitive
+     * @param z Z
+     */
+    private void basicSetZ(double z) {
         this.z = z;
     }
 
 
 
     /**
-     * @methodtype get
-     * @methodproperty primitive
-     * @return
+     * @methodtype Query: Get
+     * @methodproperty Implementation: Primitive
+     * @return x
      */
     public double getX() {
         return x;
     }
 
     /**
-     * @methodtype get
-     * @methodproperty primitive
-     * @return
+     * @methodtype Query: Get
+     * @methodproperty Implementation: Primitive
+     * @return y
      */
     public double getY() {
         return y;
     }
 
     /**
-     * @methodtype get
-     * @methodproperty primitive
-     * @return
+     * @methodtype Query: Get
+     * @methodproperty Implementation: Primitive
+     * @return z
      */
     public double getZ() {
         return z;
@@ -67,56 +106,82 @@ public class CartesianCoordinate extends AbstractCoordinate {
 
 
     /**
-     * @methodtype query, conversion
-     * @methodproperty
-     * @return
+     * @methodtype Query: Conversion
+     * @methodproperty Implementation: Regular
+     * @return Latitude
      */
     @Override
-    public SphericCoordinate asSphericCoordinate() {
-        double radius = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2) + Math.pow(z, 2));
-        double latitude = Math.toDegrees(Math.asin(z / radius));
+    public double getLatitude() {
+        double latitude = Math.toDegrees(Math.asin(z / getRadius()));
+        assert isValidLatitude(latitude);
+        return latitude;
+    }
+
+    /**
+     * @methodtype Query: Conversion
+     * @methodproperty Implementation: Regular
+     * @return Longitude
+     */
+    @Override
+    public double getLongitude() {
         double longitude = Math.toDegrees(Math.atan2(y, x));
-        return new SphericCoordinate(latitude, longitude, radius);
+        assert isValidLongitude(longitude);
+        return longitude;
+    }
+
+    /**
+     * @methodtype Query, Conversion
+     * @methodproperty Implementation: Regular
+     * @return Radius
+     */
+    @Override
+    public double getRadius() {
+        double radius = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2) + Math.pow(z, 2));
+        assert isValidRadius(radius);
+        return radius;
     }
 
 
 
     /**
-     * @methodtype comparison
-     * @methodproperty
-     * @param o
-     * @return
+     * @methodtype Helper: Assertion
+     * @methodtype Implementation: Composed
+     * @param x X
+     * @return true if x valid
      */
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof CartesianCoordinate)) return false;
+    private boolean isValidX(double x) {
+        return isNotNaN(x);
+    }
 
-        CartesianCoordinate that = (CartesianCoordinate) o;
+    /**
+     * @methodtype Helper: Assertion
+     * @methodproperty Implementation: Composed
+     * @param y Y
+     * @return true if y valid
+     */
+    private boolean isValidY(double y) {
+        return isNotNaN(y);
+    }
 
-        if (Double.compare(that.x, x) != 0) return false;
-        if (Double.compare(that.y, y) != 0) return false;
-        return Double.compare(that.z, z) == 0;
-
+    /**
+     * @methodtype Helper: Assertion
+     * @methodproperty Implementation: Composed
+     * @param z Z
+     * @return true if z valid
+     */
+    private boolean isValidZ(double z) {
+        return isNotNaN(z);
     }
 
 
 
     /**
-     * @methodtype query
-     * @methodproperty
-     * @return
+     * @methodtype Helper: Assertion
+     * @methodproperty Implementation: Composed
      */
-    @Override
-    public int hashCode() {
-        int result;
-        long temp;
-        temp = Double.doubleToLongBits(x);
-        result = (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(y);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(z);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-        return result;
+    protected void assertClassInvariants() {
+        assert isValidX(this.x);
+        assert isValidY(this.y);
+        assert isValidZ(this.z);
     }
 }
