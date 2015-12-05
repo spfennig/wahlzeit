@@ -16,7 +16,7 @@ public class CartesianCoordinate extends AbstractCoordinate {
      * @methodproperty Convenience: Constructor
      * @param cartesianCoordinate CartesianCoordinate
      */
-    public CartesianCoordinate(CartesianCoordinate cartesianCoordinate) {
+    public CartesianCoordinate(CartesianCoordinate cartesianCoordinate) throws NullPointerException {
         this(cartesianCoordinate.getX(), cartesianCoordinate.getY(), cartesianCoordinate.getZ());
     }
 
@@ -26,22 +26,18 @@ public class CartesianCoordinate extends AbstractCoordinate {
      * @param x X
      * @param y Y
      * @param z Z
-     * @throws IllegalArgumentException
      */
-    public CartesianCoordinate(double x, double y, double z) throws IllegalArgumentException {
+    public CartesianCoordinate(double x, double y, double z) {
         super();
-        if(!isValidX(x)) {
-            throw new IllegalArgumentException("Invalid x: " + x);
-        }
-        if(!isValidY(y)) {
-            throw new IllegalArgumentException("Invalid y: " + y);
-        }
-        if(!isValidZ(z)) {
-            throw new IllegalArgumentException("Invalid z: " + z);
-        }
+
+        assert isValidX(x);
+        assert isValidY(y);
+        assert isValidZ(z);
+
         basicSetX(x);
         basicSetY(y);
         basicSetZ(z);
+
         assertClassInvariants();
     }
 
@@ -179,6 +175,7 @@ public class CartesianCoordinate extends AbstractCoordinate {
      * @methodtype Helper: Assertion
      * @methodproperty Implementation: Composed
      */
+    @Override
     protected void assertClassInvariants() {
         assert isValidX(this.x);
         assert isValidY(this.y);

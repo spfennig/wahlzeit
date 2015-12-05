@@ -59,17 +59,17 @@ public class CartesianCoordinateTest {
         new CartesianCoordinate(null);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = AssertionError.class)
     public void testConstructorArgumentXNaN() {
         new CartesianCoordinate(Double.NaN, 2, 3);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = AssertionError.class)
     public void testConstructorArgumentYNaN() {
         new CartesianCoordinate(1, Double.NaN, 3);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = AssertionError.class)
     public void testConstructorArgumentZNaN() {
         new CartesianCoordinate(1, 2, Double.NaN);
     }
@@ -80,6 +80,10 @@ public class CartesianCoordinateTest {
     public void testEquals() {
         Assert.assertTrue(berlinCartesian.equals(berlinCartesianCopy));
         Assert.assertFalse(berlinCartesian.equals(tokioCartesian));
+    }
+
+    @Test(expected = AssertionError.class)
+    public void testEqualsNull() {
         Assert.assertFalse(berlinCartesian.equals(null));
     }
 }

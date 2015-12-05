@@ -62,62 +62,62 @@ public class SphericCoordinateTest {
         SphericCoordinate sphericCoordinate = new SphericCoordinate(null);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = AssertionError.class)
     public void testConstructorArgumentLessBoundaries() {
         new SphericCoordinate(-90.1, -180.1);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = AssertionError.class)
     public void testConstructorArgumentGreaterBoundaries() {
         new SphericCoordinate(90.1, 180.1);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = AssertionError.class)
     public void testConstructorArgumentMixed1Boundaries() {
         new SphericCoordinate(-90.1, 0);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = AssertionError.class)
     public void testConstructorArgumentMixed2Boundaries() {
         new SphericCoordinate(90.1, 0);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = AssertionError.class)
     public void testConstructorArgumentMixed3Boundaries() {
         new SphericCoordinate(0, -180.1);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = AssertionError.class)
     public void testConstructorArgumentMixed4Boundaries() {
         new SphericCoordinate(0, 180.1);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = AssertionError.class)
     public void testConstructorArgumentMixed5Boundaries() {
         new SphericCoordinate(-90.1, 180.1);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = AssertionError.class)
     public void testConstructorArgumentMixed6Boundaries() {
         new SphericCoordinate(90.1, -180.1);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = AssertionError.class)
     public void testConstructorArgumentRadiusBoundary() {
         new SphericCoordinate(45, 90, -0.1);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = AssertionError.class)
     public void testConstructorArgumentLatitudeNaN() {
         new SphericCoordinate(Double.NaN, 45, 6371);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = AssertionError.class)
     public void testConstructorArgumentLongitudeNaN() {
         new SphericCoordinate(45, Double.NaN, 6371);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = AssertionError.class)
     public void testConstructorArgumentRadiusNaN() {
         new SphericCoordinate(45, 45, Double.NaN);
     }
@@ -128,6 +128,10 @@ public class SphericCoordinateTest {
     public void testEquals() {
         Assert.assertTrue(berlinSpheric.equals(berlinSphericCopy));
         Assert.assertFalse(berlinSpheric.equals(tokioSpheric));
+    }
+
+    @Test(expected = AssertionError.class)
+    public void testEqualsNull() {
         Assert.assertFalse(berlinSpheric.equals(null));
     }
 
@@ -146,7 +150,7 @@ public class SphericCoordinateTest {
         Assert.assertEquals(0, berlinSpheric.getDistance(berlinCartesian), EpsilonDistance);
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test(expected = AssertionError.class)
     public void testDistanceArgumentNull() {
         berlinSpheric.getDistance(null);
     }

@@ -16,7 +16,7 @@ public class SphericCoordinate extends AbstractCoordinate {
      * @methodproperty Convenience: Constructor
      * @param sphericCoordinate SphericCoordinate
      */
-    public SphericCoordinate(SphericCoordinate sphericCoordinate) {
+    public SphericCoordinate(SphericCoordinate sphericCoordinate) throws NullPointerException {
         this(sphericCoordinate.getLatitude(), sphericCoordinate.getLongitude(), sphericCoordinate.getRadius());
     }
 
@@ -36,22 +36,18 @@ public class SphericCoordinate extends AbstractCoordinate {
      * @param latitude Latitude
      * @param longitude Longitude
      * @param radius Radius
-     * @throws IllegalArgumentException
      */
-    public SphericCoordinate(double latitude, double longitude, double radius) throws IllegalArgumentException {
+    public SphericCoordinate(double latitude, double longitude, double radius) {
         super();
-        if(!isValidLatitude(latitude)) {
-            throw new IllegalArgumentException("Invalid latitude: " + latitude);
-        }
-        if(!isValidLongitude(longitude)) {
-            throw new IllegalArgumentException("Invalid longitude: " + longitude);
-        }
-        if(!isValidRadius(radius)) {
-            throw new IllegalArgumentException("Invalid radius: " + radius);
-        }
+
+        assert isValidLatitude(latitude);
+        assert isValidLongitude(longitude);
+        assert isValidRadius(radius);
+
         basicSetLatitude(latitude);
         basicSetLongitude(longitude);
         basicSetRadius(radius);
+
         assertClassInvariants();
     }
 

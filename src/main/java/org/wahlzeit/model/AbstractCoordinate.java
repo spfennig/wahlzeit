@@ -9,7 +9,6 @@ import org.wahlzeit.services.DataObject;
 public abstract class AbstractCoordinate extends DataObject implements Coordinate {
     protected final static double DefaultRadius = 6371;
     protected final double DefaultValidDistanceRadius = DefaultRadius + 10;
-    protected final double DefaultDoubleComparisonEpsilon = 1e-3;
 
 
 
@@ -60,21 +59,17 @@ public abstract class AbstractCoordinate extends DataObject implements Coordinat
      * @throws NullPointerException, IllegalArgumentException
      */
     @Override
-    public double getDistance(Coordinate coordinate) throws NullPointerException, IllegalArgumentException {
-        if(!isNotNull(coordinate)) {
-            throw new NullPointerException("coordinate is null");
-        }
-        if(!(coordinate instanceof AbstractCoordinate)) {
-            throw new IllegalArgumentException("coordinate is not an instance of AbstractCoordinate.");
-        }
+    public double getDistance(Coordinate coordinate) {
+        assert isNotNull(coordinate);
+        assert isInstanceOfAbstractCoordinate(coordinate);
+        /* Parameter coordinate takes care of its class invariants itself */
+        assertClassInvariants();
 
-        AbstractCoordinate abstractCoordinate = (AbstractCoordinate)coordinate;
+        double distance = basicGetDistance((AbstractCoordinate)coordinate);
+
         assertClassInvariants();
-        abstractCoordinate.assertClassInvariants();
-        double distance = basicGetDistance(abstractCoordinate);
-        assertClassInvariants();
-        abstractCoordinate.assertClassInvariants();
         assert isValidDistance(distance);
+
         return distance;
     }
 
@@ -101,34 +96,18 @@ public abstract class AbstractCoordinate extends DataObject implements Coordinat
     /**
      * @methodtype Query: Comparison
      * @methodproperty Implementation: Composed
-     * @param o Object
+     * @param object Object
      * @return Equality
      */
     @Override
-    public boolean equals(Object o) {
-        if(this == o) {
-            return true;
-        }
-        if(!(o instanceof AbstractCoordinate)) {
-            return false;
-        }
-
-        /* TODO: Consider weather the following line is a clever idea */
-//        return getDistance((AbstractCoordinate)o) < DefaultDoubleComparisonEpsilon;
-
-        AbstractCoordinate that = (AbstractCoordinate) o;
+    public boolean equals(Object object) {
+        assert isNotNull(object);
         assertClassInvariants();
-        that.assertClassInvariants();
-        if(!this.compareDoubleFuzzy(that.getLatitude(), this.getLatitude())) {
-            return false;
+
+        if(isInstanceOfCoordinate(object)) {
+            return getDistance((AbstractCoordinate)object) < DefaultValidDistanceRadius;
         }
-        if(!this.compareDoubleFuzzy(that.getLongitude(), this.getLongitude())) {
-            return false;
-        }
-        boolean equal = this.compareDoubleFuzzy(that.getRadius(), this.getRadius());
-        assertClassInvariants();
-        that.assertClassInvariants();
-        return equal;
+        return false;
     }
 
     /**
@@ -142,32 +121,6 @@ public abstract class AbstractCoordinate extends DataObject implements Coordinat
         return equals(coordinate);
     }
 
-    /**
-     * @methodtype Helper: Comparison
-     * @methodproperty Implementation: Composed
-     * @param a Compare variable a
-     * @param b Compare vairalbe b
-     * @return Fuzzy comparison
-     */
-    protected boolean compareDoubleFuzzy(double a, double b) {
-        return compareDoubleFuzzy(a, b, DefaultDoubleComparisonEpsilon);
-    }
-
-    /**
-     * @methodtype Helper: Comparison
-     * @methodproperty Implementation: Regular
-     * @param a Compare variable a
-     * @param b Compare variable b
-     * @param epsilon Epsilon
-     * @return Fuzzy comparison
-     */
-    protected boolean compareDoubleFuzzy(double a, double b, double epsilon) {
-        if (a == b) {
-            return true;
-        }
-        return Math.abs(a - b) < epsilon;
-    }
-
 
 
     /**
@@ -177,6 +130,8 @@ public abstract class AbstractCoordinate extends DataObject implements Coordinat
      */
     @Override
     public int hashCode() {
+        assertClassInvariants();
+
         int result;
         long temp;
         temp = Double.doubleToLongBits(getLatitude());
@@ -208,6 +163,26 @@ public abstract class AbstractCoordinate extends DataObject implements Coordinat
      */
     protected final boolean isNotNaN(double d) {
         return (!Double.isNaN(d));
+    }
+
+    /**
+     * @methodtype Query: Boolean query
+     * @methodproperty Implementation: Regular
+     * @param object
+     * @return
+     */
+    protected final boolean isInstanceOfCoordinate(Object object) {
+        return object instanceof Coordinate;
+    }
+
+    /**
+     * @methodtype Query: Boolean query
+     * @methodproperty Implementation: Regular
+     * @param object Coordinate to check for instance of AbstractCoordinate
+     * @return true if instance of AbstractCoordinate
+     */
+    protected final boolean isInstanceOfAbstractCoordinate(Object object) {
+        return object instanceof AbstractCoordinate;
     }
 
     /**

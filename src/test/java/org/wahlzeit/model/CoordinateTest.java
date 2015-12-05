@@ -41,12 +41,12 @@ public class CoordinateTest {
         Assert.assertEquals(0, berlinCartesian.getDistance(berlinSpheric), EpsilonDistance);
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test(expected = AssertionError.class)
     public void testSphericGetDistanceArgumentNull() {
         berlinSpheric.getDistance(null);
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test(expected = AssertionError.class)
     public void testCartesianGetDistanceArgumentNull() {
         berlinCartesian.getDistance(null);
     }
@@ -63,6 +63,10 @@ public class CoordinateTest {
         Assert.assertFalse(berlinSpheric.isEqual(tokioCartesian));
         Assert.assertFalse(berlinCartesian.isEqual(tokioSpheric));
         Assert.assertFalse(berlinCartesian.isEqual(tokioCartesian));
+    }
+
+    @Test(expected = AssertionError.class)
+    public void testIsEqualNull() {
         Assert.assertFalse(berlinSpheric.isEqual(null));
         Assert.assertFalse(berlinCartesian.isEqual(null));
     }
