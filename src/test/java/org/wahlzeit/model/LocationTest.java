@@ -1,5 +1,6 @@
 package org.wahlzeit.model;
 
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.Before;
 import org.junit.Assert;
@@ -7,18 +8,17 @@ import org.junit.Assert;
 
 
 public class LocationTest {
-    private Location berlinSpheric;
-    private Location berlinCartesian;
+    private static Location berlinSpheric;
+    private static Location berlinCartesian;
 
-    private Coordinate berlinSphericCoordinate;
-    private Coordinate berlinCartesianCoordinate;
+    private static Coordinate berlinSphericCoordinate;
+    private static Coordinate berlinCartesianCoordinate;
 
     
 
-    /* TODO: Consider @BeforeClass */
-    @Before
-    public void setUp() {
-        berlinSphericCoordinate = new SphericCoordinate(52.517, 13.40);
+    @BeforeClass
+    public static void setUp() {
+        berlinSphericCoordinate = new SphericCoordinate(52.517, 13.40, 6371);
         berlinCartesianCoordinate = new CartesianCoordinate(3771.373, 898.468, 5055.605);
 
         berlinSpheric = new Location("Berlin", berlinSphericCoordinate);

@@ -3,12 +3,18 @@ package org.wahlzeit.model;
 
 import org.wahlzeit.services.DataObject;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created by stefan on 11/15/15.
  */
 public abstract class AbstractCoordinate extends DataObject implements Coordinate {
     protected final static double DefaultRadius = 6371;
     protected final double DefaultValidDistanceRadius = DefaultRadius + 10;
+    /* TODO: Consider collision probability of .hashCode() */
+    /* TODO: When to delete inserted coordinates? */
+    protected static Map<Integer, Coordinate> coordinateMap = new HashMap<Integer, Coordinate>();
 
 
 
@@ -103,11 +109,7 @@ public abstract class AbstractCoordinate extends DataObject implements Coordinat
     public boolean equals(Object object) {
         assert isNotNull(object);
         assertClassInvariants();
-
-        if(isInstanceOfCoordinate(object)) {
-            return getDistance((AbstractCoordinate)object) < DefaultValidDistanceRadius;
-        }
-        return false;
+        return this == object;
     }
 
     /**
@@ -168,8 +170,8 @@ public abstract class AbstractCoordinate extends DataObject implements Coordinat
     /**
      * @methodtype Query: Boolean query
      * @methodproperty Implementation: Regular
-     * @param object
-     * @return
+     * @param object Object to check for instanceof
+     * @return true if object is instance of Coordinate
      */
     protected final boolean isInstanceOfCoordinate(Object object) {
         return object instanceof Coordinate;

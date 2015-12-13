@@ -12,10 +12,10 @@ import org.junit.Test;
 public class CartesianCoordinateTest {
     private final double EpsilonDouble = 1e-5;
 
-    public static CartesianCoordinate berlinCartesian;
-    public static CartesianCoordinate berlinCartesianCopy;
-    public static CartesianCoordinate tokioCartesian;
-    public static SphericCoordinate berlinSpheric;
+    private static CartesianCoordinate berlinCartesian;
+    private static CartesianCoordinate berlinCartesianCopy;
+    private static CartesianCoordinate tokioCartesian;
+    private static SphericCoordinate berlinSpheric;
 
 
 
@@ -25,9 +25,9 @@ public class CartesianCoordinateTest {
         /* XYZ constructor */
         berlinCartesian = new CartesianCoordinate(3771.373, 898.468, 5055.605);
         /* Copy constructor */
-        berlinCartesianCopy = new CartesianCoordinate(berlinCartesian);
+        berlinCartesianCopy = new CartesianCoordinate(3771.373, 898.468, 5055.605);
         tokioCartesian = new CartesianCoordinate(-3949.792, 3341.734, 3717.741);
-        berlinSpheric = new SphericCoordinate(52.517, 13.4);
+        berlinSpheric = new SphericCoordinate(52.517, 13.4, 6371);
     }
 
 
@@ -41,22 +41,6 @@ public class CartesianCoordinateTest {
         Assert.assertEquals(52.517, berlinCartesian.getLatitude(), EpsilonDouble);
         Assert.assertEquals(13.4, berlinCartesian.getLongitude(), EpsilonDouble);
         Assert.assertEquals(6371, berlinCartesian.getRadius(), EpsilonDouble);
-    }
-
-    @Test
-    public void testConstructorCopyAndGetter() {
-        Assert.assertEquals(3771.373, berlinCartesianCopy.getX(), EpsilonDouble);
-        Assert.assertEquals(898.468, berlinCartesianCopy.getY(), EpsilonDouble);
-        Assert.assertEquals(5055.605, berlinCartesianCopy.getZ(), EpsilonDouble);
-
-        Assert.assertEquals(52.517, berlinCartesianCopy.getLatitude(), EpsilonDouble);
-        Assert.assertEquals(13.4, berlinCartesianCopy.getLongitude(), EpsilonDouble);
-        Assert.assertEquals(6371, berlinCartesianCopy.getRadius(), EpsilonDouble);
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void testConstructorCopyArgumentNull() {
-        new CartesianCoordinate(null);
     }
 
     @Test(expected = AssertionError.class)
@@ -75,12 +59,6 @@ public class CartesianCoordinateTest {
     }
 
 
-
-    @Test
-    public void testEquals() {
-        Assert.assertTrue(berlinCartesian.equals(berlinCartesianCopy));
-        Assert.assertFalse(berlinCartesian.equals(tokioCartesian));
-    }
 
     @Test(expected = AssertionError.class)
     public void testEqualsNull() {

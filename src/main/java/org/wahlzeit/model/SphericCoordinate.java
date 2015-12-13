@@ -1,34 +1,44 @@
 package org.wahlzeit.model;
 
-
 /**
  * Created by stefan on 11/8/15.
  */
 public class SphericCoordinate extends AbstractCoordinate {
-    private double latitude;
-    private double longitude;
-    private double radius;
+    private final double latitude;
+    private final double longitude;
+    private final double radius;
 
 
 
     /**
-     * @methodtype Mutation: Initialization
-     * @methodproperty Convenience: Constructor
-     * @param sphericCoordinate SphericCoordinate
-     */
-    public SphericCoordinate(SphericCoordinate sphericCoordinate) throws NullPointerException {
-        this(sphericCoordinate.getLatitude(), sphericCoordinate.getLongitude(), sphericCoordinate.getRadius());
-    }
-
-    /**
-     * @methodtype Mutation: Initialization
-     * @methodproperty Convenience: Constructor
+     * @methodtype Helper: Factory Method
+     * @methodproperty Convenience: Default-Value
      * @param latitude Latitude
      * @param longitude Longitude
+     * @return Coordinate
      */
-    public SphericCoordinate(double latitude, double longitude) {
-        this(latitude, longitude, DefaultRadius);
+    public static Coordinate getCoordinate(double latitude, double longitude) {
+        return getCoordinate(latitude, longitude, DefaultRadius);
     }
+
+    /**
+     * @methodtype Helper: Factory Method
+     * @methodproperty
+     * @param latitude Latitude
+     * @param longitude Longitude
+     * @param radius Radius
+     * @return coordinate
+     */
+    public static Coordinate getCoordinate(double latitude, double longitude, double radius) {
+        Coordinate coordinate = new SphericCoordinate(latitude, longitude, radius);
+        if(coordinateMap.containsKey(coordinate.hashCode())) {
+            return coordinateMap.get(coordinate.hashCode());
+        }
+        coordinateMap.put(coordinate.hashCode(), coordinate);
+        return coordinate;
+    }
+
+
 
     /**
      * @methodtype Mutation: Initialization
@@ -37,47 +47,19 @@ public class SphericCoordinate extends AbstractCoordinate {
      * @param longitude Longitude
      * @param radius Radius
      */
-    public SphericCoordinate(double latitude, double longitude, double radius) {
+    /* Access Level Package-Private for Testing purposes. */
+    SphericCoordinate(double latitude, double longitude, double radius) {
         super();
 
         assert isValidLatitude(latitude);
         assert isValidLongitude(longitude);
         assert isValidRadius(radius);
 
-        basicSetLatitude(latitude);
-        basicSetLongitude(longitude);
-        basicSetRadius(radius);
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.radius = radius;
 
         assertClassInvariants();
-    }
-
-
-
-    /**
-     * @methodtype Mutation: Set
-     * @methodproperty Implementation: Primitive
-     * @param latitude Latitude
-     */
-    private void basicSetLatitude(double latitude) {
-        this.latitude = latitude;
-    }
-
-    /**
-     * @methodtype Mutation: Set
-     * @methodproperty Implementation: Primitive
-     * @param longitude Longitude
-     */
-    private void basicSetLongitude(double longitude) {
-        this.longitude = longitude;
-    }
-
-    /**
-     * @methodtype Mutation: Set
-     * @methodproperty Implementation: Primitive
-     * @param radius Radius
-     */
-    private void basicSetRadius(double radius) {
-        this.radius = radius;
     }
 
 

@@ -1,24 +1,33 @@
 package org.wahlzeit.model;
 
-
 /**
  * Created by stefan on 11/8/15.
  */
 public class CartesianCoordinate extends AbstractCoordinate {
-    private double x;
-    private double y;
-    private double z;
+    private final double x;
+    private final double y;
+    private final double z;
 
 
 
     /**
-     * @methodtype Mutation: Initialization
-     * @methodproperty Convenience: Constructor
-     * @param cartesianCoordinate CartesianCoordinate
+     * @methodtype Helper: Factory Method
+     * @methodproperty Implementation: Regular
+     * @param x X
+     * @param y Y
+     * @param z Z
+     * @return coordinate
      */
-    public CartesianCoordinate(CartesianCoordinate cartesianCoordinate) throws NullPointerException {
-        this(cartesianCoordinate.getX(), cartesianCoordinate.getY(), cartesianCoordinate.getZ());
+    public static Coordinate getCoordinate(double x, double y, double z) {
+        Coordinate coordinate = new CartesianCoordinate(x, y, z);
+        if(coordinateMap.containsKey(coordinate.hashCode())) {
+            return coordinateMap.get(coordinate.hashCode());
+        }
+        coordinateMap.put(coordinate.hashCode(), coordinate);
+        return coordinate;
     }
+
+
 
     /**
      * @methodtype Mutation: Initialization
@@ -27,47 +36,19 @@ public class CartesianCoordinate extends AbstractCoordinate {
      * @param y Y
      * @param z Z
      */
-    public CartesianCoordinate(double x, double y, double z) {
+    /* Access Level Package-Private for Testing purposes. */
+    CartesianCoordinate(double x, double y, double z) {
         super();
 
         assert isValidX(x);
         assert isValidY(y);
         assert isValidZ(z);
 
-        basicSetX(x);
-        basicSetY(y);
-        basicSetZ(z);
+        this.x = x;
+        this.y = y;
+        this.z = z;
 
         assertClassInvariants();
-    }
-
-
-
-    /**
-     * @methodtype Mutation: Set
-     * @methodproperty iImplementation: Primitive
-     * @param x X
-     */
-    private void basicSetX(double x) {
-        this.x = x;
-    }
-
-    /**
-     * @methodtype Mutation: Set
-     * @methodproperty Implementation: Primitive
-     * @param y Y
-     */
-    private void basicSetY(double y) {
-        this.y = y;
-    }
-
-    /**
-     * @methodtype Mutation: Set
-     * @methodproperty Implementation: Primitive
-     * @param z Z
-     */
-    private void basicSetZ(double z) {
-        this.z = z;
     }
 
 

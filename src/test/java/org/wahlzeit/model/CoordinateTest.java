@@ -11,20 +11,31 @@ import org.junit.Assert;
 public class CoordinateTest {
     private final double EpsilonDistance = 10;  /* 10km */
 
-    public static Coordinate berlinSpheric;
-    public static Coordinate tokioSpheric;
-    public static Coordinate berlinCartesian;
-    public static Coordinate tokioCartesian;
+    private static Coordinate berlinSpheric;
+    private static Coordinate tokioSpheric;
+    private static Coordinate berlinCartesian;
+    private static Coordinate tokioCartesian;
+    private static Coordinate berlinSphericSameHashCode;
+    private static Coordinate berlinSpheric2;
+    private static Coordinate berlinCartesian2;
 
 
 
     @BeforeClass
     public static void setUp() {
         /* Example provided by https://de.wikipedia.org/wiki/Orthodrome, released 07.09.2015 19:55 */
-        berlinSpheric = new SphericCoordinate(52.517, 13.4);
-        tokioSpheric = new SphericCoordinate(35.70, 139.767, 6371);
-        berlinCartesian = new CartesianCoordinate(3771.373, 898.468, 5055.605);
-        tokioCartesian = new CartesianCoordinate(-3949.792, 3341.734, 3717.741);
+        berlinSpheric = SphericCoordinate.getCoordinate(52.517, 13.4);
+        tokioSpheric = SphericCoordinate.getCoordinate(35.7, 139.767);
+        berlinCartesian = CartesianCoordinate.getCoordinate(3771.373, 898.468, 5055.605);
+        tokioCartesian = CartesianCoordinate.getCoordinate(-3949.792, 3341.734, 3717.741);
+        berlinSphericSameHashCode = SphericCoordinate.getCoordinate(
+                ((AbstractCoordinate)berlinCartesian).getLatitude(),
+                ((AbstractCoordinate)berlinCartesian).getLongitude(),
+                ((AbstractCoordinate)berlinCartesian).getRadius()
+        );
+        berlinSpheric2 = SphericCoordinate.getCoordinate(52.517, 13.4);
+        berlinCartesian2 = CartesianCoordinate.getCoordinate(3771.373, 898.468, 5055.605);
+
     }
 
 
@@ -56,13 +67,13 @@ public class CoordinateTest {
     @Test
     public void testIsEqual() {
         Assert.assertTrue(berlinSpheric.isEqual(berlinSpheric));
-        Assert.assertTrue(berlinSpheric.isEqual(berlinCartesian));
-        Assert.assertTrue(berlinCartesian.isEqual(berlinSpheric));
         Assert.assertTrue(berlinCartesian.isEqual(berlinCartesian));
         Assert.assertFalse(berlinSpheric.isEqual(tokioSpheric));
-        Assert.assertFalse(berlinSpheric.isEqual(tokioCartesian));
-        Assert.assertFalse(berlinCartesian.isEqual(tokioSpheric));
         Assert.assertFalse(berlinCartesian.isEqual(tokioCartesian));
+
+        Assert.assertTrue(berlinSpheric.isEqual(berlinSpheric2));
+        Assert.assertTrue(berlinCartesian.isEqual(berlinCartesian2));
+        Assert.assertTrue(berlinCartesian.isEqual(berlinSphericSameHashCode));
     }
 
     @Test(expected = AssertionError.class)

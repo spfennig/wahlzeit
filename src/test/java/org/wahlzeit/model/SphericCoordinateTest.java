@@ -12,21 +12,19 @@ public class SphericCoordinateTest {
     private final double EpsilonDouble = 1e-5;
     private final double EpsilonDistance = 10;  /* 10km */
 
-    public static SphericCoordinate berlinSpheric;
-    public static SphericCoordinate berlinSphericCopy;
-    public static SphericCoordinate tokioSpheric;
-    public static CartesianCoordinate berlinCartesian;
+    private static SphericCoordinate berlinSpheric;
+    private static SphericCoordinate berlinSphericCopy;
+    private static SphericCoordinate tokioSpheric;
+    private static CartesianCoordinate berlinCartesian;
 
 
 
     @BeforeClass
     public static void setUp() {
         /* Example provided by https://de.wikipedia.org/wiki/Orthodrome, released 07.09.2015 19:55 */
-        /* LatLon constructor */
-        berlinSpheric = new SphericCoordinate(52.517, 13.4);
-        /* Copy constructor */
-        berlinSphericCopy = new SphericCoordinate(berlinSpheric);
         /* LatLonRad constructor */
+        berlinSpheric = new SphericCoordinate(52.517, 13.4, 6371);
+        berlinSphericCopy = new SphericCoordinate(52.517, 13.4, 6371);
         tokioSpheric = new SphericCoordinate(35.70, 139.767, 6371);
         berlinCartesian = new CartesianCoordinate(3771.373, 898.468, 5055.605);
     }
@@ -49,57 +47,44 @@ public class SphericCoordinateTest {
         Assert.assertEquals(6371, berlinSpheric.getRadius(), EpsilonDouble);
     }
 
-    @Test
-    public void testConstructorCopyAndGetter() {
-        /* Copy constructor and getter */
-        Assert.assertEquals(52.517, berlinSphericCopy.getLatitude(), EpsilonDouble);
-        Assert.assertEquals(13.4, berlinSphericCopy.getLongitude(), EpsilonDouble);
-        Assert.assertEquals(6371, berlinSphericCopy.getRadius(), EpsilonDouble);
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void testConstructorCopyArgumentNull() {
-        SphericCoordinate sphericCoordinate = new SphericCoordinate(null);
-    }
-
     @Test(expected = AssertionError.class)
     public void testConstructorArgumentLessBoundaries() {
-        new SphericCoordinate(-90.1, -180.1);
+        new SphericCoordinate(-90.1, -180.1, 6371);
     }
 
     @Test(expected = AssertionError.class)
     public void testConstructorArgumentGreaterBoundaries() {
-        new SphericCoordinate(90.1, 180.1);
+        new SphericCoordinate(90.1, 180.1, 6371);
     }
 
     @Test(expected = AssertionError.class)
     public void testConstructorArgumentMixed1Boundaries() {
-        new SphericCoordinate(-90.1, 0);
+        new SphericCoordinate(-90.1, 0, 6371);
     }
 
     @Test(expected = AssertionError.class)
     public void testConstructorArgumentMixed2Boundaries() {
-        new SphericCoordinate(90.1, 0);
+        new SphericCoordinate(90.1, 0, 6371);
     }
 
     @Test(expected = AssertionError.class)
     public void testConstructorArgumentMixed3Boundaries() {
-        new SphericCoordinate(0, -180.1);
+        new SphericCoordinate(0, -180.1, 6371);
     }
 
     @Test(expected = AssertionError.class)
     public void testConstructorArgumentMixed4Boundaries() {
-        new SphericCoordinate(0, 180.1);
+        new SphericCoordinate(0, 180.1, 6371);
     }
 
     @Test(expected = AssertionError.class)
     public void testConstructorArgumentMixed5Boundaries() {
-        new SphericCoordinate(-90.1, 180.1);
+        new SphericCoordinate(-90.1, 180.1, 6371);
     }
 
     @Test(expected = AssertionError.class)
     public void testConstructorArgumentMixed6Boundaries() {
-        new SphericCoordinate(90.1, -180.1);
+        new SphericCoordinate(90.1, -180.1, 6371);
     }
 
     @Test(expected = AssertionError.class)
@@ -123,12 +108,6 @@ public class SphericCoordinateTest {
     }
 
 
-
-    @Test
-    public void testEquals() {
-        Assert.assertTrue(berlinSpheric.equals(berlinSphericCopy));
-        Assert.assertFalse(berlinSpheric.equals(tokioSpheric));
-    }
 
     @Test(expected = AssertionError.class)
     public void testEqualsNull() {
