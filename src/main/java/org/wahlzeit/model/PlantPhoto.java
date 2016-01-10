@@ -1,11 +1,13 @@
 package org.wahlzeit.model;
 
+import com.googlecode.objectify.annotation.Entity;
+import org.wahlzeit.plants.Plant;
 
 
+
+@Entity
 public class PlantPhoto extends Photo {
-    private String plantName;
-    private boolean indoorSuitable;
-    private Location location;
+    private Plant plant = null;
 
 
 
@@ -20,7 +22,7 @@ public class PlantPhoto extends Photo {
     /**
      * @methodtype initialization
      * @methodproperty constructor
-     * @param id 
+     * @param id PhotoId
      */
     public PlantPhoto(PhotoId id) {
         super(id);
@@ -29,65 +31,20 @@ public class PlantPhoto extends Photo {
 
 
     /**
-     * @methodtype get
-     * @methodproperty primitive
-     * @return 
+     * @methodtype Query: Get
+     * @methodproperty Implementation: Primitive
+     * @return Plant
      */
-    public String getPlantName() {
-        return plantName;
-    }
-    
-    /**
-     * @methodtype set
-     * @methodproperty primitive
-     * @param plantName 
-     */
-    public void setPlantName(String plantName) {
-        this.plantName = plantName;
-        touch();
-    }
-
-
-
-    /**
-     * @methodtype get, boolean-query
-     * @methodproperty primitive
-     * @return 
-     */
-    public boolean isIndoorSuitable() {
-        return indoorSuitable;
-    }
-    
-    /**
-     * @methodtype set
-     * @methodproperty primitive
-     * @param indoorSuitable
-     */
-    public void setIndoorSuitable(boolean indoorSuitable) {
-        this.indoorSuitable = indoorSuitable;
-        touch();
-    }
-
-
-
-    /**
-     * @methodtype get
-     * @methodproperty primitive
-     * @return Location
-     */
-    public Location getLocation()
-    {
-        return location;
+    public Plant getPlant() {
+        return plant;
     }
 
     /**
-     * @methodtype set
-     * @methodproperty primitive
-     * @param location
+     * @methodtype Mutation: Set
+     * @methodproperty Implementation: Primitive
+     * @param plant Plant
      */
-    public void setLocation(Location location)
-    {
-        this.location = location;
-        touch();
+    public void setPlant(Plant plant) {
+        this.plant = plant;
     }
 }

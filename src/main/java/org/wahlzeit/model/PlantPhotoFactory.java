@@ -7,6 +7,24 @@ import org.wahlzeit.services.LogBuilder;
 
 
  public class PlantPhotoFactory extends PhotoFactory {
+	 private static PlantPhotoFactory instance = null;
+
+
+
+	 /**
+	  * @methodtype Query: Get
+	  * @methodproperty Implementation: Primitive
+	  * @return PlantPhotoFactory
+      */
+	 public static PlantPhotoFactory getInstance() {
+		 if(instance == null) {
+			 instance = new PlantPhotoFactory();
+		 }
+		 return instance;
+	 }
+
+
+
 	/**
 	 * @methodtype factory
          * @return PlantPhoto
