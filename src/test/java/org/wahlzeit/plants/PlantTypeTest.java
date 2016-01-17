@@ -26,7 +26,7 @@ public class PlantTypeTest {
 
     @BeforeClass
     public static void setUp() {
-        smallPlant = PlantManager.getInstance().getPlant("Small Plant");
+        smallPlant = PlantManager.getInstance().createPlant("Small Plant");
 
         awesomeSuperType = PlantManager.getInstance().getPlantType("Awesome Plant");
 

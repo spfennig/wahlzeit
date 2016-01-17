@@ -26,12 +26,12 @@ public class PlantManager {
 
 
     /**
-     * @methodtype Query: Get
+     * @methodtype Helper: Factory
      * @methodproperty Implementation: Regular, Composed
      * @param typeName Type Name
      * @return Plant
      */
-    public Plant getPlant(String typeName) {
+    public Plant createPlant(String typeName) {
         assert typeName != null : "typename is null";
 
         PlantType plantType = getPlantType(typeName);
